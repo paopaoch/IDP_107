@@ -17,21 +17,12 @@ const int k_r = 40;
 int displacement_front;
 int displacement_rear;
 void setup() {
-   motor_L->setSpeed(150); 
-  motor_L->run(FORWARD); 
-  // turn on motor
-  delay(1000);
-  motor_L->run(RELEASE);
-  motor_R->setSpeed(150);
-  motor_R->run(FORWARD);
-  delay(1000);
-  motor_R->run(RELEASE);
+  AFMS.begin();
   pinMode(linefollower_LR, INPUT);  
   pinMode(linefollower_RR, INPUT);  
   pinMode(linefollower_LF, INPUT);  
   pinMode(linefollower_RF, INPUT);
   Serial.begin(9600);
-  AFMS.begin()
 }
 void refresh_displacement_value(){      //this function reads the data from the sensors, and updates the state of which wheel encoder is touching the left/right
   if(digitalRead(linefollower_LR)==digitalRead(linefollower_RR))
@@ -50,11 +41,11 @@ void line_follow(){//this function reads displacement constants, and update the 
   motor_L_speed=255;
   motor_R_speed=255;
   int line_follower_constant;
-    line_follower_constant=k_r*displacement_rear+k_f*displacement_front;
+    line_follower_constant=k_r*displacement_rear-k_f*displacement_front;
     if (line_follower_constant>0){motor_L_speed=255-line_follower_constant;};
     if (line_follower_constant<0){motor_R_speed=255+line_follower_constant;};
   Serial.print("line_follower_constant");
-  Serial.print(line_follower_constant);
+  Serial.println(line_follower_constant);
   motor_L->setSpeed(motor_L_speed); 
   motor_L->run(FORWARD);
   motor_R->setSpeed(motor_R_speed);
@@ -63,9 +54,11 @@ void line_follow(){//this function reads displacement constants, and update the 
 
 void loop() {
   refresh_displacement_value();
-  line_follow();
-  Serial.print("displacement_front");
-  Serial.print(displacement_front);
-
+  int line_follower_constant;
+    line_follower_constant=k_r*displacement_rear-k_f*displacement_front;
+    if (line_follower_constant>0){motor_L_speed=255-line_follower_constant;};
+    if (line_follower_constant<0){motor_R_speed=255+line_follower_constant;};
+  Serial.print("line_follower_constant");
+  Serial.println(line_follower_constant);
 
 }
