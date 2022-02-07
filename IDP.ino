@@ -1,39 +1,41 @@
-<<<<<<< HEAD
-//this program teste the analogue read of the analogue pins. It then outputs the reading via the serial communication in the port
-const int input1 = A0;                  // sets up the analogue pin A0
-const int input2 = A1;
-const int input3 = A2;
-const int input4 = A3;
-void setup() {
-  // initialize the serial communications:
-  Serial.begin(9600);// set the baud rate(9600 in this case）
+#include <TimerOne.h>
 
+const int led = LED_BUILTIN; // the pin with a LED
+int STATE = 1;
+int ledState = LOW;
 
+void setup(void)
+{
+     pinMode(led, OUTPUT);
+     Timer1.initialize(500000);        // set the interval 500000 is .5 secs
+     Timer1.attachInterrupt(blinkLED); // attach blinkLED to the Timer as an interrupt
 }
 
-void loop() {
-  Serial.print("reading from 1 is:");
-  Serial.println(analogRead(input1));
-
-  //get reading from the pin
-  delay(1000);//delay 100 before the next reading
-=======
-#include <Serial.h>
-
-     // this is a test to key in in the serial portal, and returns the same thing you typed to make sure the serial connection working
-     char k;
-void setup() {
-
-     Serial.begin(9600);//sets the baud rate to 115200. do change the baud rate to this value in the portal as well
-
-
+void blinkLED(void) // function to blink LED
+{
+     if (ledState == LOW)
+     {
+          ledState = HIGH;
+     }
+     else
+     {
+          ledState = LOW;
+     }
+     digitalWrite(led, ledState);
 }
 
-void loop() {
-  if (Serial.available()) {
- k=Serial.read();
- delay (1);
- Serial.write(k);}
->>>>>>> c02400ecf5cc5d21610df4201584dc918465e311
-}
+void loop(void)
+{
+     delay(10000);
 
+     if (STATE == 1)
+     {
+          Timer1.setPeriod(2000000);
+          STATE = 0;
+     }
+     else
+     {
+          Timer1.setPeriod(500000);
+          STATE = 1;
+     }
+}

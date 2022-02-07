@@ -30,8 +30,8 @@ void setup() {
   pinMode(linefollower_RR, INPUT);  
   pinMode(linefollower_LF, INPUT);  
   pinMode(linefollower_RF, INPUT);
-  Serial.begin(9600);
-  AFMS.begin()
+
+  AFMS.begin();
 }
 void refresh_displacement_value(){      //this function reads the data from the sensors, and updates the state of which wheel encoder is touching the left/right
   if(digitalRead(linefollower_LR)==digitalRead(linefollower_RR))
@@ -53,8 +53,7 @@ void line_follow(){//this function reads displacement constants, and update the 
     line_follower_constant=k_r*displacement_rear+k_f*displacement_front;
     if (line_follower_constant>0){motor_L_speed=255-line_follower_constant;};
     if (line_follower_constant<0){motor_R_speed=255+line_follower_constant;};
-  Serial.print("line_follower_constant");
-  Serial.print(line_follower_constant);
+
   motor_L->setSpeed(motor_L_speed); 
   motor_L->run(FORWARD);
   motor_R->setSpeed(motor_R_speed);
@@ -66,6 +65,4 @@ void loop() {
   line_follow();
   Serial.print("displacement_front");
   Serial.print(displacement_front);
-
-
 }
