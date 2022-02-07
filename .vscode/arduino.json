@@ -1,6 +1,5 @@
 {
     "board": "arduino:megaavr:uno2018",
     "sketch": "IDP.ino",
-    "port": "COM5",
-    "configuration": "mode=on"
+    "port": "COM5"
 }
