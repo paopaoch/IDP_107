@@ -1,35 +1,19 @@
-#include <TimerOne.h>
+//this program teste the analogue read of the analogue pins. It then outputs the reading via the serial communication in the port
+const int input1 = A0;                  // sets up the analogue pin A0
+const int input2 = A1;
+const int input3 = A2;
+const int input4 = A3;
+void setup() {
+  // initialize the serial communications:
+  Serial.begin(9600);// set the baud rate(9600 in this case）
 
-const int led = LED_BUILTIN;  // the pin with a LED
-int STATE = 1;
-int ledState = LOW;
 
-void setup(void)
-{
-  pinMode(led, OUTPUT);
-  Timer1.initialize(500000); // set the interval 500000 is .5 secs
-  Timer1.attachInterrupt(blinkLED); // attach blinkLED to the Timer as an interrupt
 }
 
-void blinkLED(void) // function to blink LED
-{
-  if (ledState == LOW) {
-    ledState = HIGH;
-  } else {
-    ledState = LOW;
-  }
-  digitalWrite(led, ledState);
-}
+void loop() {
+  Serial.print("reading from 1 is:");
+  Serial.println(analogRead(input1));
 
-void loop(void)
-{
-    delay(10000);
-    
-    if (STATE == 1) {
-      Timer1.setPeriod(2000000);
-      STATE = 0;
-    }else {
-      Timer1.setPeriod(500000);
-      STATE = 1;
-  }
+  //get reading from the pin
+  delay(1000);//delay 100 before the next reading
 }
