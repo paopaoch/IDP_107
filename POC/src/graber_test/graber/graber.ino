@@ -86,9 +86,11 @@ void loop()
     // open both
     toggle_servo(3);
     // turn
-    move_to_grab(0);
-    move_to_grab(1);
-    move_to_grab(2);
+    move_to_grab(0); // turn left
+    move_to_grab(1); // turn right
+    move_to_grab(2); // move forward
+    move_to_grab(1); // turn right *for correction
+    move_to_grab(0); // turn left *for correction
     // close both
     toggle_servo(2);
     delay(5000);

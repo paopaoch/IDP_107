@@ -1,4 +1,8 @@
 {
     "arduino.path": "C:\\arduino-1.8.19",
-    "arduino.commandPath": "arduino.exe"
+    "arduino.commandPath": "arduino.exe",
+    "files.associations": {
+        "*.ejs": "html",
+        "movement.h": "c"
+    }
 }

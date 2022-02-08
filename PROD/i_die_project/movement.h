@@ -1,8 +1,12 @@
-#include <TimerOne.h>
+/*
+    THIS FILE SHOULD INCLUDE ALL FUNCTIONS WITH MOTOR ie. line follow
+*/
+#ifndef ADAFRUIT_MOTOR
+#define ADAFRUIT_MOTOR
 #include <Adafruit_MotorShield.h>
+#endif
 
-int STATE = 1;
-
+// ---------INIT MOTOR-------------
 // INIT MOTOR
 // Create the motor shield object with the default I2C address
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
@@ -16,42 +20,38 @@ const int linefollower_LF = 4; // key in the pin of left front line follower her
 const int linefollower_RF = 3; // key in the pin of right front line follower here
 const int k_f = 100;
 const int k_r = 40;
+int k = 200;
 int displacement_front;
 int displacement_rear;
 
-// INIT LED
-const int led = 6; // the pin with a LED
-int ledState = LOW;
-
-void setup(void)
+void move_to_grab(int direction) // temporary function will have to change to wheel encoder later
 {
-    Serial.begin(9600);
-
-    // *********SET UP BLINK***********
-    pinMode(led, OUTPUT);
-    Timer1.initialize(500000);        // set the interval 500000 is .5 secs
-    Timer1.attachInterrupt(blinkLED); // attach blinkLED to the Timer as an interrupt
-
-    // *********SET UP MOTOR***********
-    pinMode(linefollower_LR, INPUT);
-    pinMode(linefollower_RR, INPUT);
-    pinMode(linefollower_LF, INPUT);
-    pinMode(linefollower_RF, INPUT);
-    AFMS.begin();
-}
-
-// ---------------------BLINK INTERUPT----------------------------------------
-void blinkLED(void) // function to blink LED
-{
-    if (ledState == LOW)
+    switch (direction)
     {
-        ledState = HIGH;
+    case 0: // move right wheel
+        motor_R->setSpeed(k);  // Set the speed of motor, from 0 (off) to 255 (max speed)
+        motor_R->run(FORWARD); // Set the direction of motor 3, Use FORWARD to go forward and BACKWARD to go reverse, and RELEASE to not move it)
+        delay(1000);
+        motor_R->run(RELEASE);
+        break;
+
+    case 1: // move left wheel
+        motor_L->setSpeed(k);  // Set the speed of motor, from 0 (off) to 255 (max speed)
+        motor_L->run(FORWARD); // Set the direction of motor 3, Use FORWARD to go forward and BACKWARD to go reverse, and RELEASE to not move it)
+        delay(1000);
+        motor_L->run(RELEASE);
+        break;
+    default: // move forwards
+        motor_L->setSpeed(k);  // Set the speed of motor, from 0 (off) to 255 (max speed)
+        motor_L->run(FORWARD); // Set the direction of motor 3, Use FORWARD to go forward and BACKWARD to go reverse, and RELEASE to not move it)
+        motor_R->setSpeed(k);  // Set the speed of motor, from 0 (off) to 255 (max speed)
+        motor_R->run(FORWARD); // Set the direction of motor 3, Use FORWARD to go forward and BACKWARD to go reverse, and RELEASE to not move it)
+        delay(1000);
+        motor_L->run(RELEASE);
+        motor_R->run(RELEASE);
+        break;
     }
-    else
-    {
-        ledState = LOW;
-    }
-    digitalWrite(led, ledState);
+    delay(500);
 }
 
 // ---------------------LINE FOLLOWER------------------------------------------
@@ -113,17 +113,4 @@ void line_follow_main()
 {
     refresh_displacement_value();
     line_follow();
-}
-
-void loop()
-{
-    switch (STATE)
-    {
-    case 1:
-        line_follow_main();
-        break;
-    default:
-        line_follow_main();
-        break;
-    }
 }
