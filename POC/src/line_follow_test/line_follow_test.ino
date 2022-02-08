@@ -50,7 +50,7 @@ void line_follow(){//this function reads displacement constants, and update the 
   motor_L_speed=255;
   motor_R_speed=255;
   int line_follower_constant;
-    line_follower_constant=k_r*displacement_rear+k_f*displacement_front;
+    line_follower_constant=k_r*displacement_rear-k_f*displacement_front;
     if (line_follower_constant>0){motor_L_speed=255-line_follower_constant;};
     if (line_follower_constant<0){motor_R_speed=255+line_follower_constant;};
 
