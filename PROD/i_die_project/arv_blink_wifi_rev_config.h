@@ -21,6 +21,7 @@
 
 #include "megaAVR_TimerInterrupt.h"
 
+// green 12, amber 11, red, 8
 unsigned int outputPin = 6;
 int STATE = 1;
 
