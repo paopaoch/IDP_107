@@ -1,41 +1,41 @@
 
 #include <Adafruit_MotorShield.h>
 
-//#define TIMER_INTERRUPT_DEBUG 2
-//#define _TIMERINTERRUPT_LOGLEVEL_ 4
-//
-//#define USING_16MHZ true
-//#define USING_8MHZ false
-//#define USING_250KHZ false
-//
-//#define USE_TIMER_0 false
-//#define USE_TIMER_1 false
-//#define USE_TIMER_2 true
-//#define USE_TIMER_3 false 
-//
-//#define TIMER2_INTERVAL_MS 250
-//#define TIMER2_FREQUENCY (float)(1000.0f / TIMER1_INTERVAL_MS)
-//#define TIMER2_DURATION_MS 0 //(10 * TIMER1_INTERVAL_MS)
-//#define ADJUST_FACTOR ((float)0.99850)
-//#include "megaAVR_TimerInterrupt.h"
-//
-//unsigned int outputPin = 8;
-//
-//void blinkLED(unsigned int outputPin = 8)
-//{
-//  static bool toggle1 = false;
-//  static bool started = false;
-//
-//  if (!started)
-//  {
-//    started = true;
-//    pinMode(outputPin, OUTPUT);
-//  }
-//
-//  // timer interrupt toggles pin LED_BUILTIN
-//  digitalWrite(outputPin, toggle1);
-//  toggle1 = !toggle1;
-//}
+#define TIMER_INTERRUPT_DEBUG 2
+#define _TIMERINTERRUPT_LOGLEVEL_ 4
+
+#define USING_16MHZ true
+#define USING_8MHZ false
+#define USING_250KHZ false
+
+#define USE_TIMER_0 false
+#define USE_TIMER_1 true
+#define USE_TIMER_2 false
+#define USE_TIMER_3 false 
+
+#define TIMER1_INTERVAL_MS 250
+#define TIMER1_FREQUENCY (float)(1000.0f / TIMER1_INTERVAL_MS)
+#define TIMER1_DURATION_MS 0 //(10 * TIMER1_INTERVAL_MS)
+#define ADJUST_FACTOR ((float)0.99850)
+#include "megaAVR_TimerInterrupt.h"
+
+unsigned int outputPin = 8;
+
+void blinkLED(unsigned int outputPin = 8)
+{
+  static bool toggle1 = false;
+  static bool started = false;
+
+  if (!started)
+  {
+    started = true;
+    pinMode(outputPin, OUTPUT);
+  }
+
+  // timer interrupt toggles pin LED_BUILTIN
+  digitalWrite(outputPin, toggle1);
+  toggle1 = !toggle1;
+}
 
 // Create the motor shield object with the default I2C address
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
@@ -45,8 +45,8 @@ int motor_L_speed;
 int motor_R_speed;
 const int linefollower_LR = 5;//key in the pin of left rear line follower here
 const int linefollower_RR = 2;//key in the pin of right rear line follower here
-const int linefollower_LF = 4; //key in the pin of left front line follower here
-const int linefollower_RF = 3; //key in the pin of right front line follower here
+const int linefollower_LF = 3; //key in the pin of left front line follower here
+const int linefollower_RF = 4; //key in the pin of right front line follower here
 const int k_f = 100;
 const int k_r = 40;
 
@@ -58,8 +58,8 @@ void setup() {
   pinMode(linefollower_RR, INPUT);  
   pinMode(linefollower_LF, INPUT);  
   pinMode(linefollower_RF, INPUT);
-//  ITimer2.init();
-//  ITimer2.attachInterruptInterval(TIMER2_INTERVAL_MS * ADJUST_FACTOR, blinkLED, outputPin, TIMER2_DURATION_MS);
+  ITimer1.init();
+  ITimer1.attachInterruptInterval(TIMER1_INTERVAL_MS * ADJUST_FACTOR, blinkLED, outputPin, TIMER1_DURATION_MS);
 }
 void refresh_displacement_value(){      //this function reads the data from the sensors, and updates the state of which wheel encoder is touching the left/right
   if(digitalRead(linefollower_LR)==digitalRead(linefollower_RR))

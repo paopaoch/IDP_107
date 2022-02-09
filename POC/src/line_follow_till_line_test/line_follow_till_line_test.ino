@@ -7,10 +7,10 @@ int motor_L_speed;
 int motor_R_speed;
 const int linefollower_LR = 5;//key in the pin of left rear line follower here
 const int linefollower_RR = 2;//key in the pin of right rear line follower here
-const int linefollower_LF = 4; //key in the pin of left front line follower here
-const int linefollower_RF = 3; //key in the pin of right front line follower here
-const int encoder_L = 3;//key in the pin of left encoder here
-const int encoder_R = 3;//key in the pin of right encoder here
+const int linefollower_LF = 3; //key in the pin of left front line follower here
+const int linefollower_RF = 4; //key in the pin of right front line follower here
+const int encoder_L = 7;//key in the pin of left encoder here
+const int encoder_R = 6;//key in the pin of right encoder here
 const int k_f = 100;
 const int k_r = 40;
 bool not_at_the_line=true;
@@ -29,6 +29,7 @@ void setup() {
   pinMode(encoder_R,INPUT);
   attachInterrupt(digitalPinToInterrupt(encoder_L), wheel_encoder_L_increment, CHANGE);
   attachInterrupt(digitalPinToInterrupt(encoder_R), wheel_encoder_R_increment, CHANGE);
+  Serial.begin(9600);
 
 //  ITimer2.init();
 //  ITimer2.attachInterruptInterval(TIMER2_INTERVAL_MS * ADJUST_FACTOR, blinkLED, outputPin, TIMER2_DURATION_MS);
@@ -69,16 +70,22 @@ void line_follow(){//this function reads displacement constants, and update the 
   motor_R->setSpeed(motor_R_speed);
   motor_R->run(FORWARD);
 }
-void line_follow_main_rev(float rev_needed)//this function follow the line, untile the front sensors reach the line we need
+void line_follow_main_rev(int rev_needed)//this function follow the line, untile the front sensors reach the line we need
 { 
-    while(not_at_the_line||float(encoder_L_count)<12*rev_needed){
+   while(not_at_the_line||float(encoder_L_count)<12*rev_needed){
+  // while(true){
     refresh_displacement_value();
-    line_follow();};
+    line_follow();
+    
+};
+motor_L->run(RELEASE);
+motor_R->run(RELEASE);
  encoder_L_count=0;
  encoder_R_count=0;
+ 
 }
 void loop() {
-  line_follow_main_rev(1);
+  line_follow_main_rev(96);
   while(true){
   delay(100);};
 }
