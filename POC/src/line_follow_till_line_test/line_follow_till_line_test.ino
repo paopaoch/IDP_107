@@ -69,9 +69,9 @@ void line_follow(){//this function reads displacement constants, and update the 
   motor_R->setSpeed(motor_R_speed);
   motor_R->run(FORWARD);
 }
-void line_follow_main_rev(int rev_needed)//this function follow the line, untile the front sensors reach the line we need
+void line_follow_main_rev(float rev_needed)//this function follow the line, untile the front sensors reach the line we need
 { 
-    while(not_at_the_line||encoder_L_count<2*rev_needed){
+    while(not_at_the_line||float(encoder_L_count)<12*rev_needed){
     refresh_displacement_value();
     line_follow();};
  encoder_L_count=0;
