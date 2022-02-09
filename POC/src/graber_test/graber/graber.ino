@@ -10,9 +10,9 @@ Adafruit_DCMotor *motor_R = AFMS.getMotor(4); // key in the port the right motor
 int motor_L_speed;
 int motor_R_speed;
 int k = 200;
-int CLOSE_R = 135;
-int CLOSE_L = 55;
-int OPEN_R = 45;
+int CLOSE_R = 145;
+int CLOSE_L = 45;
+int OPEN_R = 55;
 int OPEN_L = 145;
 int pos_L;
 int pos_R;
@@ -25,10 +25,10 @@ int servo_state = 0; // 0 is close left, 1 is close right, 2 is all close, 3 is 
 void setup()
 {
     AFMS.begin();
-    servo_L.attach(9);  // this is to attach servo to object, pin 10 for servo1, pin 9 for servo 2
-    servo_R.attach(10); // this is to attach servo to object, pin 10 for servo1, pin 9 for servo 2
-    servo_R.write(CLOSE_R);
-    servo_L.write(CLOSE_L);
+    servo_L.attach(10);  // this is to attach servo to object, pin 10 for servo1, pin 9 for servo 2
+    servo_R.attach(9); // this is to attach servo to object, pin 10 for servo1, pin 9 for servo 2
+    servo_R.write(OPEN_R);
+    servo_L.write(OPEN_L);
 }
 
 void move_to_grab(int direction) // temporary function will have to change to wheel encoder later

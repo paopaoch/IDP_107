@@ -21,7 +21,8 @@ void setup() {
   Serial.println("Motor Shield found.");
 
   // Set the speed to start, from 0 (off) to 255 (max speed)
-
+  motor_L->run(RELEASE);
+  motor_R->run(RELEASE);
 
 }
 void move1(){ 

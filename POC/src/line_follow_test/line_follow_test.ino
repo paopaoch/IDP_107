@@ -9,6 +9,7 @@
 #define USING_250KHZ false
 
 #define USE_TIMER_0 false
+<<<<<<< HEAD
 #define USE_TIMER_1 true
 #define USE_TIMER_2 false
 #define USE_TIMER_3 false 
@@ -16,6 +17,15 @@
 #define TIMER1_INTERVAL_MS 250
 #define TIMER1_FREQUENCY (float)(1000.0f / TIMER1_INTERVAL_MS)
 #define TIMER1_DURATION_MS 0 //(10 * TIMER1_INTERVAL_MS)
+=======
+#define USE_TIMER_1 false
+#define USE_TIMER_2 true
+#define USE_TIMER_3 false 
+
+#define TIMER2_INTERVAL_MS 250
+#define TIMER2_FREQUENCY (float)(1000.0f / TIMER1_INTERVAL_MS)
+#define TIMER2_DURATION_MS 0 //(10 * TIMER1_INTERVAL_MS)
+>>>>>>> 41ebb02a485d54456481f2f08f1906c7a3496914
 #define ADJUST_FACTOR ((float)0.99850)
 #include "megaAVR_TimerInterrupt.h"
 
@@ -23,6 +33,7 @@ unsigned int outputPin = 8;
 
 void blinkLED(unsigned int outputPin = 8)
 {
+<<<<<<< HEAD
   static bool toggle1 = false;
   static bool started = false;
 
@@ -35,6 +46,20 @@ void blinkLED(unsigned int outputPin = 8)
   // timer interrupt toggles pin LED_BUILTIN
   digitalWrite(outputPin, toggle1);
   toggle1 = !toggle1;
+=======
+ static bool toggle1 = false;
+ static bool started = false;
+
+ if (!started)
+ {
+   started = true;
+   pinMode(outputPin, OUTPUT);
+ }
+
+ // timer interrupt toggles pin LED_BUILTIN
+ digitalWrite(outputPin, toggle1);
+ toggle1 = !toggle1;
+>>>>>>> 41ebb02a485d54456481f2f08f1906c7a3496914
 }
 
 // Create the motor shield object with the default I2C address
@@ -58,8 +83,13 @@ void setup() {
   pinMode(linefollower_RR, INPUT);  
   pinMode(linefollower_LF, INPUT);  
   pinMode(linefollower_RF, INPUT);
+<<<<<<< HEAD
   ITimer1.init();
   ITimer1.attachInterruptInterval(TIMER1_INTERVAL_MS * ADJUST_FACTOR, blinkLED, outputPin, TIMER1_DURATION_MS);
+=======
+ ITimer2.init();
+ ITimer2.attachInterruptInterval(TIMER2_INTERVAL_MS * ADJUST_FACTOR, blinkLED, outputPin, TIMER2_DURATION_MS);
+>>>>>>> 41ebb02a485d54456481f2f08f1906c7a3496914
 }
 void refresh_displacement_value(){      //this function reads the data from the sensors, and updates the state of which wheel encoder is touching the left/right
   if(digitalRead(linefollower_LR)==digitalRead(linefollower_RR))

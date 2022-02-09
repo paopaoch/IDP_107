@@ -1,18 +1,18 @@
-#include "arv_blink_wifi_rev_config.h"
-#include "graber.h"
 #include "movement.h"
+#include "graber.h"
+#include "arv_blink_wifi_rev_config.h"
 //just some info, the robot should go 187 cm forward, 110 cm back, and another 177 cm forward, another 155 cm back, another 205 cm forward, 185cm backward, and after the last block, and 74 cm back to starting position
 // convert to revolution, that is (8.52 rev, 5.019rev, 8.06 rev, 7.24 rev, 9.34 rev,8.61 rev and 3.37 rev), as the wheel perimeter is 21.94 cm. 
 // for the rotation, it takes 1.654 rev on a single wheel to turn 90 deg(or in other words, 0.827 on both wheels to have 90 deg turn. double for 180 deg turn. )
 void setup(void)
 {
-    Serial.begin(9600);
+//    Serial.begin(9600);
 
-    // *********SET UP BLINK***********
-    // ITimer1.init();
-    // ITimer1.attachInterruptInterval(TIMER1_INTERVAL_MS * ADJUST_FACTOR, blinkLED, outputPin, TIMER1_DURATION_MS);
-    ITimer2.init();
-    ITimer2.attachInterruptInterval(TIMER2_INTERVAL_MS * ADJUST_FACTOR, blinkLED, outputPin, TIMER2_DURATION_MS);
+//    // *********SET UP BLINK***********
+     ITimer1.init();
+     ITimer1.attachInterruptInterval(TIMER1_INTERVAL_MS * ADJUST_FACTOR, blinkLED, outputPin, TIMER1_DURATION_MS);
+//    ITimer2.init();
+//    ITimer2.attachInterruptInterval(TIMER2_INTERVAL_MS * ADJUST_FACTOR, blinkLED, outputPin, TIMER2_DURATION_MS);
 
     // *********SET UP MOTOR***********
     pinMode(linefollower_LR, INPUT);
@@ -30,7 +30,7 @@ void setup(void)
 
 void loop()
 {
-    int counter = 0;
+//    int counter = 0;
     // switch (STATE)
     // {
     // case 1:
@@ -43,17 +43,17 @@ void loop()
     // default:
     //     break;
     // }
-    while (true)
-    {
+//    while (true)
+//    {
         line_follow_main();
-        counter += 1;
-        if (counter == 5000)
-        {
-            break;
-        }
-    }
+//        counter += 1;
+//        if (counter == 5000)
+//        {
+//            break;
+//        }
+//    }
     motor_R->run(RELEASE);
     motor_L->run(RELEASE);
-    //    grabber_main();
+      grabber_main();
     delay(2000);
 }
