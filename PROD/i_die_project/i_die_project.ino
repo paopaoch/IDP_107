@@ -1,7 +1,9 @@
 #include "arv_blink_wifi_rev_config.h"
 #include "graber.h"
 #include "movement.h"
-
+//just some info, the robot should go 187 cm forward, 114 cm back, and another 175 cm forward, another 159 cm back, another 205 cm forward, 189cm backward, and after the last block, and 74 cm back to starting position
+// convert to revolution, that is (8.52 rev, 5.19rev, 7.97 rev, 7.24 rev, 9.34 rev,8.61 rev and 3.37 rev), as the wheel perimeter is 21.94 cm. 
+// for the rotation, it takes 1.467 rev on a single wheel to turn 90 deg(or in other words, 0.733 on both wheels to have 90 deg turn. double for 180 deg turn. )
 void setup(void)
 {
     Serial.begin(9600);
