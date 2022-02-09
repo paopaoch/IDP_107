@@ -4,14 +4,12 @@
 #ifndef ADAFRUIT_MOTOR
 #define ADAFRUIT_MOTOR
 #include <Adafruit_MotorShield.h>
-#endif
-
-// ---------INIT MOTOR-------------
-// INIT MOTOR
-// Create the motor shield object with the default I2C address
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 Adafruit_DCMotor *motor_L = AFMS.getMotor(3); // key in the port the left motor is connected to here
 Adafruit_DCMotor *motor_R = AFMS.getMotor(4); // key in the port the right motor is connected to here
+// ---------INIT MOTOR-------------
+// INIT MOTOR
+// Create the motor shield object with the default I2C address
 int motor_L_speed;
 int motor_R_speed;
 const int linefollower_LR = 5; // key in the pin of left rear line follower here
@@ -20,7 +18,7 @@ const int linefollower_LF = 4; // key in the pin of left front line follower her
 const int linefollower_RF = 3; // key in the pin of right front line follower here
 const int k_f = 100;
 const int k_r = 40;
-int k = 200;
+int k = 150;
 int displacement_front;
 int displacement_rear;
 
@@ -114,3 +112,4 @@ void line_follow_main()
     refresh_displacement_value();
     line_follow();
 }
+#endif
