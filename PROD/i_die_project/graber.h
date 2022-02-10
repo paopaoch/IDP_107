@@ -24,7 +24,6 @@ void close_R()
 {
     for (pos_R = OPEN_R; pos_R <= CLOSE_R; pos_R += 1)
     {
-        blinkLEDTemp();
         servo_R.write(pos_R);
         delay(grabber_speed);
     }
@@ -34,7 +33,6 @@ void open_R()
 {
     for (pos_R = CLOSE_R; pos_R >= OPEN_R; pos_R -= 1)
     {
-        blinkLEDTemp();
         servo_R.write(pos_R);
         delay(grabber_speed);
     }
@@ -44,7 +42,6 @@ void close_L()
 {
     for (pos_L = OPEN_L; pos_L >= CLOSE_L; pos_L -= 1)
     {
-        blinkLEDTemp();
         servo_L.write(pos_L);
         delay(grabber_speed);
     }
@@ -54,7 +51,6 @@ void open_L()
 {
     for (pos_L = CLOSE_L; pos_L <= OPEN_L; pos_L += 1)
     {
-        blinkLEDTemp();
         servo_L.write(pos_L);
         delay(grabber_speed);
     }
@@ -65,7 +61,6 @@ void open_both()
     pos_L = CLOSE_L;
     for (pos_R = CLOSE_R; pos_R >= OPEN_R; pos_R -= 1)
     {
-        blinkLEDTemp();
         servo_R.write(pos_R);
         servo_L.write(pos_L);
         delay(grabber_speed);
