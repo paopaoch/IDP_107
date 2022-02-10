@@ -12,7 +12,7 @@ const int linefollower_RF = 4; //key in the pin of right front line follower her
 const int encoder_L = 7;//key in the pin of left encoder here
 const int encoder_R = 6;//key in the pin of right encoder here
 const int k_f = 100;
-const int k_r = 40;
+const int k_r = -40;
 int not_at_the_line=0;
 bool res;
 int encoder_L_count=0;
@@ -82,15 +82,15 @@ void line_follow(){//this function reads displacement constants, and update the 
 }
 void line_follow_main_rev(int rev_needed)//this function follow the line, untile the front sensors reach the line we need
 { 
-   while(true//||
-   //encoder_L_count<rev_needed
+   while(!res||
+    encoder_L_count<rev_needed
    ){
   // while(true){
     res = refresh_displacement_value();
     line_follow();
-    if (res) {
-      break;
-    }
+    //if (res) {
+    //  break;
+    //}
     
 };
 motor_L->run(RELEASE);
@@ -101,9 +101,8 @@ motor_R->run(RELEASE);
 }
 void loop() {
   refresh_displacement_value();
-  line_follow_main_rev(1);
-  if(digitalRead(linefollower_LF)){Serial.print("LF is high");}
-  if(digitalRead(linefollower_RF)){Serial.print("RF is high");}
-  Serial.println(not_at_the_line);
-delay(100);
+  line_follow_main_rev(96);
+;
+while (true){
+delay(100);}
 }
