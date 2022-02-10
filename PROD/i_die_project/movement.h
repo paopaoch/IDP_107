@@ -192,7 +192,7 @@ void rotate(int turn_k)
     case TURN_LEFT_FORWARD:
         motor_R->run(FORWARD);
         break;
-    case TURN_LEFT_FORWARD:
+    case TURN_LEFT_BACKWARD:
         motor_L->run(BACKWARD);
         break;
     case TURN_RIGHT_BACKWARD:
