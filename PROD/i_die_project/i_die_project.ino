@@ -38,7 +38,7 @@ void loop()
     {
     case 1:
         // line_follow_main();
-        line_follow_main_rev(96); // line follow till block
+        line_follow_main_rev(90); // line follow till block
         STATE = 2;
         break;
     case 2:
@@ -46,20 +46,20 @@ void loop()
         STATE = 3;
         break;
     case 3:
-        rotate(TURN_RIGHT_FORWARD); // turn right while move forwards
-        rotate(TURN_RIGHT_BACKWARD); // turn right while move backwards
+        rotate(3); // turn around
         STATE = 4;
         break;
     case 4:
         // line_follow_main();
-        line_follow_main_rev(96); // line follow till back to line * have to calibrate
+        line_follow_main_rev(50); // line follow till back to line * have to calibrate
         STATE = 5;
         break;
     case 5:
-        rotate(1); // turn right while move forwards
+        rotate(TURN_RIGHT_FORWARD); // turn right while move forwards
         open_both(); //open
-        rotate(2); // turn right while move backwards
+        rotate(TURN_LEFT_BACKWARD); // turn right while move backwards
         STATE = 1;
+        rotate(3);
         break;
     default:
         break;
