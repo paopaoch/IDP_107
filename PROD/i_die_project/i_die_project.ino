@@ -1,3 +1,4 @@
+#include "blink_temp.h"
 #include "movement.h"
 #include "graber.h"
 //just some info, the robot should go 187 cm forward, 110 cm back, and another 177 cm forward, another 155 cm back, another 205 cm forward, 185cm backward, and after the last block, and 74 cm back to starting position
@@ -9,6 +10,8 @@ int STATE = 1;
 void setup(void)
 {
 //    Serial.begin(9600);
+    //**********SET UP BLINK***********
+    pinMode(amberPin, OUTPUT);
 
     // *********SET UP MOTOR***********
     pinMode(linefollower_LR, INPUT);  
@@ -30,6 +33,7 @@ void setup(void)
 
 void loop()
 {
+    blinkLEDTemp();
     switch (STATE)
     {
     case 1:
@@ -42,8 +46,8 @@ void loop()
         STATE = 3;
         break;
     case 3:
-        rotate(1); // turn right while move forwards
-        rotate(2); // turn right while move backwards
+        rotate(TURN_RIGHT_FORWARD); // turn right while move forwards
+        rotate(TURN_RIGHT_BACKWARD); // turn right while move backwards
         STATE = 4;
         break;
     case 4:
