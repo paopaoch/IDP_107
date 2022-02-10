@@ -13,7 +13,8 @@ const int encoder_L = 7;//key in the pin of left encoder here
 const int encoder_R = 6;//key in the pin of right encoder here
 const int k_f = 100;
 const int k_r = 40;
-bool not_at_the_line=true;
+int not_at_the_line=0;
+bool res;
 int encoder_L_count=0;
 int encoder_R_count=0;
 
@@ -42,7 +43,7 @@ void wheel_encoder_R_increment()
 { 
   encoder_R_count += 1; 
 }
-void refresh_displacement_value(){      //this function reads the data from the sensors, and updates the state of which wheel encoder is touching the left/right
+bool refresh_displacement_value(){      //this function reads the data from the sensors, and updates the state of which wheel encoder is touching the left/right
   if(digitalRead(linefollower_LR)==digitalRead(linefollower_RR))
   {displacement_rear=0;}
   else{  
@@ -55,7 +56,16 @@ void refresh_displacement_value(){      //this function reads the data from the 
     if(digitalRead(linefollower_LF)==HIGH){displacement_front=1;}
      else{displacement_front=-1;};};
   
-  if(digitalRead(linefollower_LF)==HIGH && digitalRead(linefollower_RF)==HIGH){not_at_the_line=false;}{not_at_the_line=true;};
+  if(digitalRead(linefollower_LF)==LOW && digitalRead(linefollower_RF)==LOW)
+  {
+//    not_at_the_line=1;
+      return true;
+  }
+  else 
+  {
+//    not_at_the_line=0;
+      return false;
+  };
 }
 void line_follow(){//this function reads displacement constants, and update the motor speed, and move the motor}
   motor_L_speed=255;
@@ -72,10 +82,15 @@ void line_follow(){//this function reads displacement constants, and update the 
 }
 void line_follow_main_rev(int rev_needed)//this function follow the line, untile the front sensors reach the line we need
 { 
-   while(not_at_the_line||float(encoder_L_count)<12*rev_needed){
+   while(true//||
+   //encoder_L_count<rev_needed
+   ){
   // while(true){
-    refresh_displacement_value();
+    res = refresh_displacement_value();
     line_follow();
+    if (res) {
+      break;
+    }
     
 };
 motor_L->run(RELEASE);
@@ -85,7 +100,10 @@ motor_R->run(RELEASE);
  
 }
 void loop() {
-  line_follow_main_rev(96);
-  while(true){
-  delay(100);};
+  refresh_displacement_value();
+  line_follow_main_rev(1);
+  if(digitalRead(linefollower_LF)){Serial.print("LF is high");}
+  if(digitalRead(linefollower_RF)){Serial.print("RF is high");}
+  Serial.println(not_at_the_line);
+delay(100);
 }
