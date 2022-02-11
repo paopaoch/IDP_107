@@ -1,8 +1,8 @@
 // this is the basic program to test whether the arduino is working. simply uploade, and it will turn the onboard LED on and off alternatly.
-unsigned int outputPin = 8;
+unsigned int outputPin = LED_BUILTIN;
 int ledState = 0;
 unsigned long previousMillis = 0;
-const long interval = 250;
+const long interval = 500;
 // the setup function runs once when you press reset or power the board
 void setup()
 {
@@ -33,8 +33,7 @@ void blinkLEDTemp()
     digitalWrite(outputPin, ledState);
   }
 }
-
-void loop()
-{
-  blinkLEDTemp();
-}
+  void loop()
+  {
+    blinkLEDTemp();
+  }

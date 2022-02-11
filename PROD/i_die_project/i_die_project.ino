@@ -1,7 +1,7 @@
 #include "blink_temp.h"
 #include "movement.h"
 #include "graber.h"
-//just some info, the robot should go 187 cm forward, 110 cm back, and another 177 cm forward, another 155 cm back, another 205 cm forward, 185cm backward, and after the last block, and 74 cm back to starting position
+// pao just some info, the robot should go 187 cm forward, 110 cm back, and another 177 cm forward, another 155 cm back, another 205 cm forward, 185cm backward, and after the last block, and 74 cm back to starting position
 // convert to revolution, that is (8.52 rev, 5.019rev, 8.06 rev, 7.24 rev, 9.34 rev,8.61 rev and 3.37 rev), as the wheel perimeter is 21.94 cm. 
 // for the rotation, it takes 1.654 rev on a single wheel to turn 90 deg(or in other words, 0.827 on both wheels to have 90 deg turn. double for 180 deg turn. )
 
@@ -29,6 +29,7 @@ void setup(void)
     servo_R.attach(9); // this is to attach servo to object, pin 10 for servo1, pin 9 for servo 2
     servo_R.write(OPEN_R);
     servo_L.write(OPEN_L);
+    delay(3000);
 }
 
 void loop()
@@ -38,7 +39,7 @@ void loop()
     {
     case 1:
         // line_follow_main();
-        line_follow_main_rev(90); // line follow till block
+        line_follow_main_rev(100); // line follow till block
         STATE = 2;
         break;
     case 2:
@@ -51,7 +52,7 @@ void loop()
         break;
     case 4:
         // line_follow_main();
-        line_follow_main_rev(50); // line follow till back to line * have to calibrate
+        line_follow_main_rev(65); // line follow till back to line * have to calibrate
         STATE = 5;
         break;
     case 5:
