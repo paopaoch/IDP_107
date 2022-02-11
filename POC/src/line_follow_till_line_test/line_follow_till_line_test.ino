@@ -1,5 +1,7 @@
 #include <Adafruit_MotorShield.h>
-
+//just some info, the robot should go 187 cm forward, 110 cm back, and another 177 cm forward, another 155 cm back, another 205 cm forward, 185cm backward, and after the last block, and 74 cm back to starting position
+// convert to revolution, that is (8.52 rev, 5.019rev, 8.06 rev, 7.24 rev, 9.34 rev,8.61 rev and 3.37 rev), as the wheel perimeter is 21.94 cm. 
+// for the rotation, it takes 1.654 rev on a single wheel to turn 90 deg(or in other words, 0.827 on both wheels to have 90 deg turn. double for 180 deg turn. )
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 Adafruit_DCMotor *motor_L = AFMS.getMotor(3);//key in the port the left motor is connected to here
 Adafruit_DCMotor *motor_R = AFMS.getMotor(4);//key in the port the right motor is connected to here
@@ -101,7 +103,7 @@ motor_R->run(RELEASE);
 }
 void loop() {
   refresh_displacement_value();
-  line_follow_main_rev(96);
+  line_follow_main_rev(90);
 ;
 while (true){
 delay(100);}
