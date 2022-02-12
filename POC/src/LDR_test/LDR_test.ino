@@ -14,18 +14,18 @@ void setup()
 
 void loop()
 {
-    // Serial.println(analogRead(input1));
-    if (analogRead(LDRinput) < fineAvg + threshold && analogRead(LDRinput) >= fineAvg - threshold)
-    {
-        Serial.println("fine block");
-    }
-    else if (analogRead(LDRinput) < coarseAvg + threshold && analogRead(LDRinput) >= coarseAvg - threshold)
-    {
-        Serial.println("coarse block");
-    }
-    else
-    {
+//    // Serial.println(analogRead(input1));
+//    if (analogRead(LDRinput) < fineAvg + threshold && analogRead(LDRinput) >= fineAvg - threshold)
+//    {
+//        Serial.println("fine block");
+//    }
+//    else if (analogRead(LDRinput) < coarseAvg + threshold && analogRead(LDRinput) >= coarseAvg - threshold)
+//    {
+//        Serial.println("coarse block");
+//    }
+//    else
+//    {
         Serial.println(analogRead(LDRinput));
-    }
+//    }
     
 }

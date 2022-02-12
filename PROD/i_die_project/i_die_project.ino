@@ -34,6 +34,12 @@ void setup(void)
 
 void loop()
 {
+//      servo_R.write(CLOSE_R);
+//      servo_L.write(CLOSE_L);
+//      line_follow_main_rev(100); // line follow till block
+//      while(true) {
+//        delay(100);
+//        }
     blinkLEDTemp();
     switch (STATE)
     {

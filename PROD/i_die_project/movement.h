@@ -30,7 +30,7 @@ const int linefollower_RF = 4; // key in the pin of right front line follower he
 const int encoder_L = 7;       // key in the pin of left encoder here
 const int encoder_R = 6;       // key in the pin of right encoder here
 const int k_f = 100;
-const int k_r = 40;
+const int k_r = -40;
 int not_at_the_line = 0;
 bool res;
 int encoder_L_count = 0;
