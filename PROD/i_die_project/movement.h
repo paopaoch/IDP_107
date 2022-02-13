@@ -1,5 +1,5 @@
 /*
-    THIS FILE SHOULD INCLUDE ALL FUNCTIONS WITH MOTOR ie. line follow
+    THIS FILE SHOULD INCLUDE ALL FUNCTIONS WITH MOTOR eg. line follow
 */
 
 #ifndef ADAFRUIT_MOTOR
@@ -9,10 +9,12 @@
 #define TURN_RIGHT_BACKWARD 2
 #define TURN_LEFT_FORWARD -1
 #define TURN_LEFT_BACKWARD -2
+#define TURN_AROUND 0
 
 #define MOVE_GRAB_LEFT 0
 #define MOVE_GRAB_RIGHT 1
 #define MOVE_GRAB_FORWARD 2
+#define MOVE_GRAB_BACKWARD 3
 
 #include <Adafruit_MotorShield.h>
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
@@ -39,9 +41,8 @@ int k = 150;
 int displacement_front;
 int displacement_rear;
 
-void move_to_grab(int direction) // temporary function will have to change to wheel encoder later
+void move_to_grab(int direction, int GRAB_MOVE_SPEED = 150)
 {
-    unsigned long startGrabTime = millis();
     switch (direction)
     {
     case MOVE_GRAB_LEFT:
@@ -49,10 +50,7 @@ void move_to_grab(int direction) // temporary function will have to change to wh
         motor_L->run(FORWARD);    // Set the direction of motor 3, Use FORWARD to go forward and BACKWARD to go reverse, and RELEASE to not move it)
         motor_R->setSpeed(k);     // Set the speed of motor, from 0 (off) to 255 (max speed)
         motor_R->run(FORWARD);    // Set the direction of motor 3, Use FORWARD to go forward and BACKWARD to go reverse, and RELEASE to not move it)
-        while (startGrabTime - millis() < 150)
-        {
-            blinkLEDTemp();
-        }
+        delay(GRAB_MOVE_SPEED);
         motor_L->run(RELEASE);
         motor_R->run(RELEASE);
         break;
@@ -62,26 +60,40 @@ void move_to_grab(int direction) // temporary function will have to change to wh
         motor_L->run(FORWARD);    // Set the direction of motor 3, Use FORWARD to go forward and BACKWARD to go reverse, and RELEASE to not move it)
         motor_R->setSpeed(k / 2); // Set the speed of motor, from 0 (off) to 255 (max speed)
         motor_R->run(FORWARD);    // Set the direction of motor 3, Use FORWARD to go forward and BACKWARD to go reverse, and RELEASE to not move it)
-        while (startGrabTime - millis() < 150)
-        {
-            blinkLEDTemp();
-        }
+        delay(GRAB_MOVE_SPEED);
         motor_L->run(RELEASE);
         motor_R->run(RELEASE);
         break;
-    default:
+    case MOVE_GRAB_FORWARD:
         motor_L->setSpeed(k);  // Set the speed of motor, from 0 (off) to 255 (max speed)
         motor_L->run(FORWARD); // Set the direction of motor 3, Use FORWARD to go forward and BACKWARD to go reverse, and RELEASE to not move it)
         motor_R->setSpeed(k);  // Set the speed of motor, from 0 (off) to 255 (max speed)
         motor_R->run(FORWARD); // Set the direction of motor 3, Use FORWARD to go forward and BACKWARD to go reverse, and RELEASE to not move it)
-        while (startGrabTime - millis() < 150)
-        {
-            blinkLEDTemp();
-        }
+        delay(GRAB_MOVE_SPEED);
+        motor_L->run(RELEASE);
+        motor_R->run(RELEASE);
+        break;
+    default:
+        motor_L->setSpeed(k);   // Set the speed of motor, from 0 (off) to 255 (max speed)
+        motor_L->run(BACKWARD); // Set the direction of motor 3, Use FORWARD to go forward and BACKWARD to go reverse, and RELEASE to not move it)
+        motor_R->setSpeed(k);   // Set the speed of motor, from 0 (off) to 255 (max speed)
+        motor_R->run(BACKWARD); // Set the direction of motor 3, Use FORWARD to go forward and BACKWARD to go reverse, and RELEASE to not move it)
+        delay(GRAB_MOVE_SPEED);
         motor_L->run(RELEASE);
         motor_R->run(RELEASE);
         break;
     }
+}
+
+void kill_it()
+{
+    motor_L->run(RELEASE);
+    motor_R->run(RELEASE);
+}
+void clear_encoder()
+{
+    encoder_L_count = 0;
+    encoder_R_count = 0;
 }
 
 void wheel_encoder_L_increment()
@@ -137,88 +149,76 @@ bool refresh_displacement_value()
         return false;
     };
 }
-    void line_follow()
-    { // this function reads displacement constants, and update the motor speed, and move the motor}
-        motor_L_speed = 255;
-        motor_R_speed = 255;
-        int line_follower_constant;
-        line_follower_constant = k_r * displacement_rear - k_f * displacement_front;
-        if (line_follower_constant > 0)
-        {
-            motor_L_speed = 255 - line_follower_constant;
-        };
-        if (line_follower_constant < 0)
-        {
-            motor_R_speed = 255 + line_follower_constant;
-        };
+void line_follow()
+{ // this function reads displacement constants, and update the motor speed, and move the motor}
+    motor_L_speed = 255;
+    motor_R_speed = 255;
+    int line_follower_constant;
+    line_follower_constant = k_r * displacement_rear - k_f * displacement_front;
+    if (line_follower_constant > 0)
+    {
+        motor_L_speed = 255 - line_follower_constant;
+    };
+    if (line_follower_constant < 0)
+    {
+        motor_R_speed = 255 + line_follower_constant;
+    };
 
-        motor_L->setSpeed(motor_L_speed);
+    motor_L->setSpeed(motor_L_speed);
+    motor_L->run(FORWARD);
+    motor_R->setSpeed(motor_R_speed);
+    motor_R->run(FORWARD);
+}
+void line_follow_main_rev(int rev_needed) // this function follow the line, untile the front sensors reach the line we need
+{
+    clear_encoder();
+    while (!res || encoder_L_count < rev_needed)
+    {
+        res = refresh_displacement_value();
+        line_follow();
+    };
+    motor_L->run(RELEASE);
+    motor_R->run(RELEASE);
+    clear_encoder();
+}
+
+void rotate(int k) // return value does not matter but if true then it should turn around
+{
+    motor_L_speed = 255;
+    motor_R_speed = 255;
+    motor_L->setSpeed(motor_L_speed);
+    motor_R->setSpeed(motor_R_speed);
+    clear_encoder();
+    switch (k)
+    { //+:turn right, -:turn left  method 1:move forward while turing  method 2:move backward while turning default:turn left 90 deg, not moving
+    case TURN_RIGHT_FORWARD:
         motor_L->run(FORWARD);
-        motor_R->setSpeed(motor_R_speed);
+        break;
+    case TURN_LEFT_FORWARD:
         motor_R->run(FORWARD);
-    }
-    void line_follow_main_rev(int rev_needed) // this function follow the line, untile the front sensors reach the line we need
+        break;
+    case TURN_LEFT_BACKWARD:
+        motor_L->run(BACKWARD);
+        break;
+    case TURN_RIGHT_BACKWARD:
+        motor_R->run(BACKWARD);
+        break;
+    default:
+        motor_R->run(FORWARD);
+        motor_L->run(BACKWARD);
+        break;
+    };
+    int encoder_max = 19;
+    if (k == TURN_AROUND)
     {
-        while (not_at_the_line || encoder_L_count < 12 * rev_needed)
-        {
-            // while(true){
-            res = refresh_displacement_value();
-            line_follow();
-            blinkLEDTemp();
-            if (res)
-            {
-                break;
-            };
-        };
-        motor_L->run(RELEASE);
-        motor_R->run(RELEASE);
-        encoder_L_count = 0;
-        encoder_R_count = 0;
+        encoder_max = 38;
     }
-
-    void kill_it()
+    while (encoder_L_count + encoder_R_count < encoder_max)
     {
-        motor_L->run(RELEASE);
-        motor_R->run(RELEASE);
+        delay(1);
     }
-    void clear_encoder()
-    {
-        encoder_L_count = 0;
-        encoder_R_count = 0;
-    }
-
-    void rotate(int turn_k)
-    {
-        motor_L_speed = 255;
-        motor_R_speed = 255;
-        motor_L->setSpeed(motor_L_speed);
-        motor_R->setSpeed(motor_R_speed);
-        clear_encoder();
-        switch (turn_k)
-        { //+:turn right, -:turn left  method 1:move forward while turing  method 2:move backward while turning default:turn left 90 deg, not moving
-        case TURN_RIGHT_FORWARD:
-            motor_L->run(FORWARD);
-            break;
-        case TURN_LEFT_FORWARD:
-            motor_R->run(FORWARD);
-            break;
-        case TURN_LEFT_BACKWARD:
-            motor_L->run(BACKWARD);
-            break;
-        case TURN_RIGHT_BACKWARD:
-            motor_R->run(BACKWARD);
-            break;
-        default:
-            motor_R->run(FORWARD);
-            motor_L->run(BACKWARD);
-            break;
-        };
-        while (encoder_L_count + encoder_R_count < 19)
-        {
-            blinkLEDTemp();
-        }
-        kill_it();
-        clear_encoder();
-    }
+    kill_it();
+    clear_encoder();
+}
 
 #endif

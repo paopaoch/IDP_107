@@ -77,11 +77,12 @@ void rotate(int k)
 }
 
 void loop()
-{rotate(1);
-delay(1000);
-rotate(-2);
-delay(1000);
-rotate(0);
+{
+  rotate(1);
+  delay(1000);
+  rotate(-2);
+  delay(1000);
+  rotate(0);
 
   while (true)
   {

@@ -41,7 +41,7 @@ void move_to_grab(int direction) // temporary function will have to change to wh
         motor_L->run(FORWARD); // Set the direction of motor 3, Use FORWARD to go forward and BACKWARD to go reverse, and RELEASE to not move it)
         motor_R->setSpeed(k);  // Set the speed of motor, from 0 (off) to 255 (max speed)
         motor_R->run(FORWARD); // Set the direction of motor 3, Use FORWARD to go forward and BACKWARD to go reverse, and RELEASE to not move it)
-        delay(300);
+        delay(150);
         motor_L->run(RELEASE);
         motor_R->run(RELEASE);
         break;
@@ -51,21 +51,31 @@ void move_to_grab(int direction) // temporary function will have to change to wh
         motor_L->run(FORWARD); // Set the direction of motor 3, Use FORWARD to go forward and BACKWARD to go reverse, and RELEASE to not move it)
         motor_R->setSpeed(k/2);  // Set the speed of motor, from 0 (off) to 255 (max speed)
         motor_R->run(FORWARD); // Set the direction of motor 3, Use FORWARD to go forward and BACKWARD to go reverse, and RELEASE to not move it)
-        delay(300);
+        delay(150);
+        motor_L->run(RELEASE);
+        motor_R->run(RELEASE);
+        break;
+    case 2:
+        motor_L->setSpeed(k);  // Set the speed of motor, from 0 (off) to 255 (max speed)
+        motor_L->run(FORWARD); // Set the direction of motor 3, Use FORWARD to go forward and BACKWARD to go reverse, and RELEASE to not move it)
+        motor_R->setSpeed(k);  // Set the speed of motor, from 0 (off) to 255 (max speed)
+        motor_R->run(FORWARD); // Set the direction of motor 3, Use FORWARD to go forward and BACKWARD to go reverse, and RELEASE to not move it)
+        delay(GRAB_MOVE_SPEED);
         motor_L->run(RELEASE);
         motor_R->run(RELEASE);
         break;
     default:
         motor_L->setSpeed(k);  // Set the speed of motor, from 0 (off) to 255 (max speed)
-        motor_L->run(FORWARD); // Set the direction of motor 3, Use FORWARD to go forward and BACKWARD to go reverse, and RELEASE to not move it)
+        motor_L->run(BACKWARD); // Set the direction of motor 3, Use FORWARD to go forward and BACKWARD to go reverse, and RELEASE to not move it)
         motor_R->setSpeed(k);  // Set the speed of motor, from 0 (off) to 255 (max speed)
-        motor_R->run(FORWARD); // Set the direction of motor 3, Use FORWARD to go forward and BACKWARD to go reverse, and RELEASE to not move it)
-        delay(300);
+        motor_R->run(BACKWARD); // Set the direction of motor 3, Use FORWARD to go forward and BACKWARD to go reverse, and RELEASE to not move it)
+        delay(GRAB_MOVE_SPEED);
         motor_L->run(RELEASE);
         motor_R->run(RELEASE);
         break;
     }
-    delay(300);
+    }
+    delay(150);
 }
 
 void close_R()
