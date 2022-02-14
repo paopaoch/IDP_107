@@ -169,13 +169,17 @@ void line_follow()
     motor_R->setSpeed(motor_R_speed);
     motor_R->run(FORWARD);
 }
-void line_follow_main_rev(int rev_needed) // this function follow the line, untile the front sensors reach the line we need
+void line_follow_main_rev(int rev_needed, int limit=100) // this function follow the line, untile the front sensors reach the line we need
 {
     clear_encoder();
     while (!res || encoder_L_count < rev_needed)
     {
         res = refresh_displacement_value();
         line_follow();
+        if (encoder_L_count = limit)
+        {
+            break;
+        }
     };
     motor_L->run(RELEASE);
     motor_R->run(RELEASE);

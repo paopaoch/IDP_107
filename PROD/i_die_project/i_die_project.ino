@@ -40,19 +40,19 @@ void loop()
     case 1: // move robot to block
         if (BLOCK_NUMBER == 1)
         {
-            line_follow_main_rev(90);
+            line_follow_main_rev(90, 100);
         }
         else if (BLOCK_NUMBER == 2)
         {
-            line_follow_main_rev(40);
+            line_follow_main_rev(40, 60);
             delay(500);
-            line_follow_main_rev(10);
+            line_follow_main_rev(10, 25);
         }
         else if (BLOCK_NUMBER == 3)
         {
-            line_follow_main_rev(40);
+            line_follow_main_rev(40, 60);
             delay(500);
-            line_follow_main_rev(10);
+            line_follow_main_rev(10, 25);
             delay(500);
             forward(20);
         }
@@ -112,9 +112,9 @@ void loop()
     case 5: // bring robot back
         if (BLOCK_NUMBER == 2 || BLOCK_NUMBER == 3)
         {
-            line_follow_main_rev(5); // line follow till back to line
+            line_follow_main_rev(5, 10); // line follow till back to line
         }
-        line_follow_main_rev(30);
+        line_follow_main_rev(30, 45);
         STATE = 6;
         break;
     case 6:                             // logic for putting block in the right box
@@ -138,7 +138,7 @@ void loop()
         break;
     case 7:
         rotate(TURN_AROUND); // turn around
-        line_follow_main_rev(10);
+        line_follow_main_rev(10, 15);
         move_to_grab(MOVE_GRAB_FORWARD, 1000);
         forward(20);
         servo_R.write(CLOSE_R);
