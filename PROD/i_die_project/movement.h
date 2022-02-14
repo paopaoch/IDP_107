@@ -31,8 +31,8 @@ const int linefollower_LF = 3; // key in the pin of left front line follower her
 const int linefollower_RF = 4; // key in the pin of right front line follower here
 const int encoder_L = 7;       // key in the pin of left encoder here
 const int encoder_R = 6;       // key in the pin of right encoder here
-const int k_f = 100;
-const int k_r = -40;
+const int k_f = 95;
+const int k_r = -38;
 int not_at_the_line = 0;
 bool res;
 int encoder_L_count = 0;
@@ -41,7 +41,7 @@ int k = 150;
 int displacement_front;
 int displacement_rear;
 
-void move_to_grab(int direction, int GRAB_MOVE_SPEED = 150)
+void move_to_grab(int direction, int GRAB_MOVE_SPEED = 200)
 {
     switch (direction)
     {
@@ -182,6 +182,40 @@ void line_follow_main_rev(int rev_needed) // this function follow the line, unti
     clear_encoder();
 }
 
+void forward(int value)
+{
+    motor_L_speed = 255;
+    motor_R_speed = 255;
+    motor_L->setSpeed(motor_L_speed);
+    motor_R->setSpeed(motor_R_speed);
+    clear_encoder();
+    motor_R->run(FORWARD);
+    motor_L->run(FORWARD);
+    while (encoder_L_count + encoder_R_count < value)
+    {
+        delay(1);
+    }
+    kill_it();
+    clear_encoder();
+}
+
+void backward(int value)
+{
+    motor_L_speed = 255;
+    motor_R_speed = 255;
+    motor_L->setSpeed(motor_L_speed);
+    motor_R->setSpeed(motor_R_speed);
+    clear_encoder();
+    motor_R->run(BACKWARD);
+    motor_L->run(BACKWARD);
+    while (encoder_L_count + encoder_R_count < value)
+    {
+        delay(1);
+    }
+    kill_it();
+    clear_encoder();
+}
+
 void rotate(int k) // return value does not matter but if true then it should turn around
 {
     motor_L_speed = 255;
@@ -208,10 +242,10 @@ void rotate(int k) // return value does not matter but if true then it should tu
         motor_L->run(BACKWARD);
         break;
     };
-    int encoder_max = 19;
+    int encoder_max = 21;
     if (k == TURN_AROUND)
     {
-        encoder_max = 38;
+        encoder_max = 42;
     }
     while (encoder_L_count + encoder_R_count < encoder_max)
     {

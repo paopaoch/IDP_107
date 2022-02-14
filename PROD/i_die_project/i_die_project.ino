@@ -42,12 +42,21 @@ void loop()
         {
             line_follow_main_rev(90);
         }
-        else if (BLOCK_NUMBER == 2 || BLOCK_NUMBER == 3)
+        else if (BLOCK_NUMBER == 2)
         {
-            line_follow_main_rev(50);
+            line_follow_main_rev(40);
             delay(500);
-            line_follow_main_rev(30);
+            line_follow_main_rev(10);
         }
+        else if (BLOCK_NUMBER == 3)
+        {
+            line_follow_main_rev(40);
+            delay(500);
+            line_follow_main_rev(10);
+            delay(500);
+            forward(20);
+        }
+        
         else if (BLOCK_NUMBER == 4)
         {
             STATE = 7;
@@ -68,31 +77,33 @@ void loop()
         delay(1000);
         break;
     case 3: // detect block type
-        block_type = block_detect();
-        if (block_type == ERROR_BLOCK)
-        {
-            for (size_t i = 0; i < 3; i++)
-            {
-                move_to_grab(MOVE_GRAB_BACKWARD);
-            }
-            open_both();
-        }
-        else
-        {
-            STATE = 4;
-            switch (block_type)
-            {
-            case FINE_BLOCK:
-                shineGreen();
-                break;
-            case COARSE_BLOCK:
-                shineRed();
-                break;
-            default:
-                delay(1000);
-                break;
-            }
-        }
+//        block_type = block_detect();
+//        if (block_type == ERROR_BLOCK)
+//        {
+//            for (size_t i = 0; i < 3; i++)
+//            {
+//                move_to_grab(MOVE_GRAB_BACKWARD);
+//            }
+//            open_both();
+//        }
+//        else
+//        {
+//            STATE = 4;
+//            switch (block_type)
+//            {
+//            case FINE_BLOCK:
+//                shineGreen();
+//                break;
+//            case COARSE_BLOCK:
+//                shineRed();
+//                break;
+//            default:
+//                delay(1000);
+//                break;
+//            }
+//        }
+          STATE = 4;
+          block_type = FINE_BLOCK;
         break;
     case 4: // turn around
         rotate(TURN_AROUND);
@@ -101,9 +112,9 @@ void loop()
     case 5: // bring robot back
         if (BLOCK_NUMBER == 2 || BLOCK_NUMBER == 3)
         {
-            line_follow_main_rev(40); // line follow till back to line
+            line_follow_main_rev(5); // line follow till back to line
         }
-        line_follow_main_rev(50);
+        line_follow_main_rev(30);
         STATE = 6;
         break;
     case 6:                             // logic for putting block in the right box
@@ -127,8 +138,9 @@ void loop()
         break;
     case 7:
         rotate(TURN_AROUND); // turn around
-        line_follow_main_rev(30);
+        line_follow_main_rev(10);
         move_to_grab(MOVE_GRAB_FORWARD, 1000);
+        forward(20);
         servo_R.write(CLOSE_R);
         servo_L.write(CLOSE_L);
         while (true)

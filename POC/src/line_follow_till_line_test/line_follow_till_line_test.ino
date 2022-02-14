@@ -147,7 +147,7 @@ void line_follow_main_rev(int rev_needed) // this function follow the line, unti
 void loop()
 {
   refresh_displacement_value();
-  line_follow_main_rev(90);
+  line_follow_main_rev(10);
   ;
   while (true)
   {

@@ -160,7 +160,7 @@ void error_block_put_back(int distance = 500)
 void grabbing_third_block()
 {
     close_both();
-    move_to_grab(MOVE_GRAB_BACKWARD, 2000);
+    backward(20);
     open_both();
     grabber_main();
 }
