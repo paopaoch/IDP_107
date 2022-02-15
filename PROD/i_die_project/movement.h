@@ -169,7 +169,7 @@ void line_follow()
     motor_R->setSpeed(motor_R_speed);
     motor_R->run(FORWARD);
 }
-void line_follow_main_rev(int rev_needed, int limit=100) // this function follow the line, untile the front sensors reach the line we need
+void line_follow_main_rev(int rev_needed, int limit = 100) // this function follow the line, untile the front sensors reach the line we need
 {
     clear_encoder();
     while (!res || encoder_L_count < rev_needed)
@@ -222,6 +222,7 @@ void backward(int value)
 
 void rotate(int k) // return value does not matter but if true then it should turn around
 {
+    bool move_through_line = false;
     motor_L_speed = 255;
     motor_R_speed = 255;
     motor_L->setSpeed(motor_L_speed);
@@ -253,10 +254,24 @@ void rotate(int k) // return value does not matter but if true then it should tu
     }
     while (encoder_L_count + encoder_R_count < encoder_max)
     {
-        delay(1);
+        if (encoder_max - encoder_L_count - encoder_R_count < 4)
+        {
+            if (digitalRead(linefollower_LF) == HIGH || digitalRead(linefollower_RF) == HIGH)
+            {
+                move_through_line = true;
+            }
+        }
     }
     kill_it();
     clear_encoder();
+    if (move_through_line)
+    {
+        move_to_grab(MOVE_GRAB_RIGHT, 250);
+    }
+    else
+    {
+        move_to_grab(MOVE_GRAB_LEFT, 250);
+    }
 }
 
 #endif
