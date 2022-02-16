@@ -7,6 +7,7 @@
 // for the rotation, it takes 1.654 rev on a single wheel to turn 90 deg(or in other words, 0.827 on both wheels to have 90 deg turn. double for 180 deg turn. )
 
 int STATE = 1;
+int RETRY = 0;
 void setup(void)
 {
     //    Serial.begin(9600);
@@ -40,21 +41,21 @@ void loop()
     case 1: // move robot to block
         if (BLOCK_NUMBER == 1)
         {
-            line_follow_main_rev(90, 100);
+            line_follow_main_rev(80, 106);
         }
         else if (BLOCK_NUMBER == 2)
         {
-            line_follow_main_rev(40, 60);
+            line_follow_main_rev(40, 66);
             delay(500);
-            line_follow_main_rev(10, 25);
+            line_follow_main_rev(10, 40);
         }
         else if (BLOCK_NUMBER == 3)
         {
-            line_follow_main_rev(40, 60);
+            line_follow_main_rev(40, 66);
             delay(500);
             line_follow_main_rev(10, 25);
             delay(500);
-            forward(20);
+            forward(26);
         }
         
         else if (BLOCK_NUMBER == 4)
@@ -65,9 +66,20 @@ void loop()
         STATE = 2;
         break;
     case 2:
+//        if (BLOCK_NUMBER == 1)
+//        {
+//            grabber_main(); // grab the block
+//        }
         if (BLOCK_NUMBER == 1 || BLOCK_NUMBER == 2)
         {
+            move_to_grab(MOVE_GRAB_BACKWARD, 600);
+            close_both();
+            move_to_grab(MOVE_GRAB_BACKWARD, 2000);
+            open_both();
+            move_to_grab(MOVE_GRAB_FORWARD, 600);
             grabber_main(); // grab the block
+            move_to_grab(MOVE_GRAB_FORWARD, 2000);
+            
         }
         else if (BLOCK_NUMBER == 3)
         {
@@ -77,33 +89,49 @@ void loop()
         delay(1000);
         break;
     case 3: // detect block type
-//        block_type = block_detect();
-//        if (block_type == ERROR_BLOCK)
-//        {
-//            for (size_t i = 0; i < 3; i++)
-//            {
-//                move_to_grab(MOVE_GRAB_BACKWARD);
-//            }
-//            open_both();
-//        }
-//        else
-//        {
-//            STATE = 4;
-//            switch (block_type)
-//            {
-//            case FINE_BLOCK:
-//                shineGreen();
-//                break;
-//            case COARSE_BLOCK:
-//                shineRed();
-//                break;
-//            default:
-//                delay(1000);
-//                break;
-//            }
-//        }
-          STATE = 4;
-          block_type = FINE_BLOCK;
+        block_type = block_detect();
+        if (block_type == ERROR_BLOCK)
+        {
+          if (RETRY == 3)
+            {
+                shineRed();
+                STATE = 4;
+                block_type = COARSE_BLOCK;
+            }
+          else
+            {
+            for (size_t i = 0; i < 3; i++)
+            {
+                move_to_grab(MOVE_GRAB_BACKWARD);
+            }
+            open_both();
+            for (size_t i = 0; i < 4; i++)
+            {
+                move_to_grab(MOVE_GRAB_FORWARD);
+            }
+                STATE = 2;
+                RETRY += 1;
+            }
+        }
+        else
+        {
+            STATE = 4;
+            switch (block_type)
+            {
+            case FINE_BLOCK:
+                shineGreen();
+                break;
+            case COARSE_BLOCK:
+                shineRed();
+                break;
+            default:
+                delay(1000);
+                break;
+            }
+        }
+//          STATE = 4;
+//          block_type = FINE_BLOCK;
+//          shineGreen();
         break;
     case 4: // turn around
         rotate(TURN_AROUND);
@@ -112,12 +140,18 @@ void loop()
     case 5: // bring robot back
         if (BLOCK_NUMBER == 2 || BLOCK_NUMBER == 3)
         {
-            line_follow_main_rev(5, 10); // line follow till back to line
+            line_follow_main_rev(5, 50); // line follow till back to line
         }
-        line_follow_main_rev(30, 45);
+        delay(500);
+        line_follow_main_rev(15, 75);
         STATE = 6;
         break;
     case 6:                             // logic for putting block in the right box
+        if (BLOCK_NUMBER == 2 || BLOCK_NUMBER == 3)
+        {
+             delay(500);
+             forward(20);
+        }
         if (block_type == COARSE_BLOCK) // logic for coarse block
         {
             dimRed();
@@ -138,7 +172,7 @@ void loop()
         break;
     case 7:
         rotate(TURN_AROUND); // turn around
-        line_follow_main_rev(10, 15);
+        line_follow_main_rev(10, 20);
         move_to_grab(MOVE_GRAB_FORWARD, 1000);
         forward(20);
         servo_R.write(CLOSE_R);

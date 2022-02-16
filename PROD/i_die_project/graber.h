@@ -7,10 +7,10 @@
 Servo servo_L;
 Servo servo_R;
 int servo_state = 0; // 0 is close left, 1 is close right, 2 is all close, 3 is all open
-int CLOSE_R = 150;
-int CLOSE_L = 25;
-int OPEN_R = 60;
-int OPEN_L = 115;
+int CLOSE_R = 135;
+int CLOSE_L = 65;
+int OPEN_R = 30;
+int OPEN_L = 160;
 int pos_L;
 int pos_R;
 int grabber_speed = 20;
@@ -121,20 +121,46 @@ void grabber_main()
 
 void coarse_block_put_back(int distance = 500)
 {
-    rotate(TURN_RIGHT_FORWARD); // turn right while move forwards
-    move_to_grab(MOVE_GRAB_FORWARD, distance);
-    open_both(); // open
-    move_to_grab(MOVE_GRAB_BACKWARD, distance);
-    rotate(TURN_RIGHT_BACKWARD); // turn right while move backwards
+    if (BLOCK_NUMBER == 2 || BLOCK_NUMBER == 3)
+    {
+      rotate(TURN_RIGHT_BOTH);
+      move_to_grab(MOVE_GRAB_FORWARD, distance + 800);
+      open_both(); // open
+      move_to_grab(MOVE_GRAB_BACKWARD, distance + 800);
+      rotate(TURN_RIGHT_BOTH);
+      open_both(); // open
+    }
+    else
+    {
+      rotate(TURN_RIGHT_FORWARD); // turn right while move forwards
+      move_to_grab(MOVE_GRAB_FORWARD, distance);
+      open_both(); // open
+      move_to_grab(MOVE_GRAB_BACKWARD, distance);
+      rotate(TURN_RIGHT_BACKWARD); // turn right while move backwards
+    }
+  
 }
 
 void fine_block_put_back(int distance = 500)
 {
-    rotate(TURN_LEFT_FORWARD); // turn right while move forwards
-    move_to_grab(MOVE_GRAB_FORWARD, distance);
-    open_both(); // open
-    move_to_grab(MOVE_GRAB_BACKWARD, distance);
-    rotate(TURN_LEFT_BACKWARD); // turn right while move backwards
+    if (BLOCK_NUMBER == 2 || BLOCK_NUMBER == 3)
+    {
+      rotate(TURN_LEFT_BOTH);
+      move_to_grab(MOVE_GRAB_FORWARD, distance + 800);
+      open_both(); // open
+      move_to_grab(MOVE_GRAB_BACKWARD, distance + 800);
+      close_both();
+      rotate(TURN_LEFT_BOTH);
+      open_both(); // open
+    }
+    else
+    {
+      rotate(TURN_LEFT_FORWARD); // turn right while move forwards
+      move_to_grab(MOVE_GRAB_FORWARD, distance);
+      open_both(); // open
+      move_to_grab(MOVE_GRAB_BACKWARD, distance);
+      rotate(TURN_LEFT_BACKWARD); // turn right while move backwards 
+    }
 }
 
 void error_block_put_back(int distance = 500)

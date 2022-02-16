@@ -1,10 +1,10 @@
-// this program teste the analogue read of the analogue pins. It then outputs the reading via the serial communication in the port
+  // this program teste the analogue read of the analogue pins. It then outputs the reading via the serial communication in the port
 const int LDRinput = A0; // sets up the analogue pin A0
 // const int porousHigh = 900;
 // const int porousLow = 700;
 
-const int coarseAvg = 700;
-const int fineAvg = 900;
+const int coarseAvg = 200;
+const int fineAvg = 400;
 const int threshold = 100;
 void setup()
 {
@@ -14,7 +14,7 @@ void setup()
 
 void loop()
 {
-//    // Serial.println(analogRead(input1));
+    // Serial.println(analogRead(input1));
 //    if (analogRead(LDRinput) < fineAvg + threshold && analogRead(LDRinput) >= fineAvg - threshold)
 //    {
 //        Serial.println("fine block");

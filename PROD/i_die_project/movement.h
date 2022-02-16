@@ -9,6 +9,8 @@
 #define TURN_RIGHT_BACKWARD 2
 #define TURN_LEFT_FORWARD -1
 #define TURN_LEFT_BACKWARD -2
+#define TURN_RIGHT_BOTH 3
+#define TURN_LEFT_BOTH -3
 #define TURN_AROUND 0
 
 #define MOVE_GRAB_LEFT 0
@@ -29,10 +31,10 @@ const int linefollower_LR = 5; // key in the pin of left rear line follower here
 const int linefollower_RR = 2; // key in the pin of right rear line follower here
 const int linefollower_LF = 3; // key in the pin of left front line follower here
 const int linefollower_RF = 4; // key in the pin of right front line follower here
-const int encoder_L = 7;       // key in the pin of left encoder here
-const int encoder_R = 6;       // key in the pin of right encoder here
+const int encoder_L = 6;       // key in the pin of left encoder here
+const int encoder_R = 7;       // key in the pin of right encoder here
 const int k_f = 95;
-const int k_r = -38;
+const int k_r = 38;
 int not_at_the_line = 0;
 bool res;
 int encoder_L_count = 0;
@@ -176,7 +178,7 @@ void line_follow_main_rev(int rev_needed, int limit = 100) // this function foll
     {
         res = refresh_displacement_value();
         line_follow();
-        if (encoder_L_count = limit)
+        if (encoder_L_count == limit)
         {
             break;
         }
@@ -242,6 +244,14 @@ void rotate(int k) // return value does not matter but if true then it should tu
     case TURN_RIGHT_BACKWARD:
         motor_R->run(BACKWARD);
         break;
+    case TURN_RIGHT_BOTH:
+        motor_R->run(BACKWARD);
+        motor_L->run(FORWARD);
+        break;
+    case TURN_LEFT_BOTH:
+        motor_R->run(FORWARD);
+        motor_L->run(BACKWARD);
+        break;
     default:
         motor_R->run(FORWARD);
         motor_L->run(BACKWARD);
@@ -250,17 +260,11 @@ void rotate(int k) // return value does not matter but if true then it should tu
     int encoder_max = 21;
     if (k == TURN_AROUND)
     {
-        encoder_max = 42;
+        encoder_max = 40;
     }
     while (encoder_L_count + encoder_R_count < encoder_max)
     {
-        if (encoder_max - encoder_L_count - encoder_R_count < 4)
-        {
-            if (digitalRead(linefollower_LF) == HIGH || digitalRead(linefollower_RF) == HIGH)
-            {
-                move_through_line = true;
-            }
-        }
+        delay(1);
     }
     kill_it();
     clear_encoder();
