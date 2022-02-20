@@ -3,8 +3,8 @@ const int LDRinput = A0; // sets up the analogue pin A0
 // const int porousHigh = 900;
 // const int porousLow = 700;
 
-const int coarseAvg = 200;
-const int fineAvg = 400;
+const int coarseAvg = 400;
+const int fineAvg = 550;
 const int threshold = 100;
 void setup()
 {
@@ -15,7 +15,7 @@ void setup()
 void loop()
 {
     // Serial.println(analogRead(input1));
-//    if (analogRead(LDRinput) < fineAvg + threshold && analogRead(LDRinput) >= fineAvg - threshold)
+//    if (analogRead(LDRinput) >= fineAvg - threshold)
 //    {
 //        Serial.println("fine block");
 //    }

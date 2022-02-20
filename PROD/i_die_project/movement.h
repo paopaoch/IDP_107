@@ -257,7 +257,7 @@ void rotate(int k) // return value does not matter but if true then it should tu
         motor_L->run(BACKWARD);
         break;
     };
-    int encoder_max = 21;
+    int encoder_max = 20;
     if (k == TURN_AROUND)
     {
         encoder_max = 40;

@@ -10,6 +10,9 @@ int STATE = 1;
 int RETRY = 0;
 void setup(void)
 {
+    servo_R.write(CLOSE_R);
+    servo_L.write(CLOSE_L);
+    delay(4000);
     //    Serial.begin(9600);
     // *********SET UP LED*************
     pinMode(outputPinGreen, OUTPUT);
@@ -31,7 +34,6 @@ void setup(void)
     servo_R.attach(9);  // this is to attach servo to object, pin 10 for servo1, pin 9 for servo 2
     servo_R.write(OPEN_R);
     servo_L.write(OPEN_L);
-    delay(3000);
 }
 
 void loop()

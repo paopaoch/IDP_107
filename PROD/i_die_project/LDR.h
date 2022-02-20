@@ -6,7 +6,7 @@ const int LDRinput = A0; // sets up the analogue pin A0
 
 //const int coarseAvg = 400; // set average reading of coarse block
 //const int fineAvg = 650;   // set averagereading of fine block
-const int threshold = 500; // set the threshold offset of each block
+const int threshold = 520; // set the threshold offset of each block
 const int lowerBound = 100;
 int block_type;
 
